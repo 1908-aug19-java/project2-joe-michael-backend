@@ -59,7 +59,7 @@ JSon body{
 deleteStreak /streaks/{streak id}- should never be called unless user is removed and streak is orphaned
 
 
-##TeamController
+## TeamController
 
 Auth Headers required
 token = {generated token}
@@ -85,7 +85,7 @@ JSON body:{
 ### team delete requests
 deleteTeam  /teams/{team id}
 
-##UserController
+## UserController
 
 Auth Headers required except for addUser and login
 token = {generated token}
@@ -117,7 +117,7 @@ JSON body:{
 ### user delete requests
 deleteUser users/{user id} 
 
-##WagerController
+## WagerController
 
 Auth Headers required
 token = {generated token}
