@@ -27,7 +27,6 @@ public class EncryptionUtil {
      * @param myKey - AES 256 key
      */
     public static void setKey(String myKey) {
-    	System.out.println(myKey);
     	
         MessageDigest sha = null;
         

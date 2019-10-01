@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import com.revature.util.AuthorizationUtil;
 
 @RestController
 @RequestMapping("/streaks")
+@CrossOrigin
 public class StreakController {
 	
 	@Autowired
@@ -30,6 +32,7 @@ public class StreakController {
 	private UserService userService;
 	
 	AuthorizationUtil au = new AuthorizationUtil();
+	
 	
 	@GetMapping
 	public ResponseEntity<List<Streak>> getAll(@RequestHeader(value="token")String token,
@@ -47,6 +50,7 @@ public class StreakController {
 		List<Streak> streaks = streakService.findAllStreaks();
 		return new ResponseEntity<List<Streak>>(streaks, HttpStatus.OK);
 	}
+	
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Streak> getStreakById(@PathVariable("id")Integer id,
@@ -68,6 +72,7 @@ public class StreakController {
 		
 	}
 	
+	
 	@PostMapping
 	public ResponseEntity<Streak> addStreak(@Valid @RequestBody Streak streak,
 			@RequestHeader(value="token")String token,
@@ -85,6 +90,7 @@ public class StreakController {
 		streakService.addStreak(streak);
 		return new ResponseEntity<Streak>(streak, HttpStatus.CREATED);
 	}
+	
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Streak> updateStreak(@PathVariable("id")Integer id,
@@ -105,6 +111,7 @@ public class StreakController {
 		streak = streakService.updateStreak(streak);
 		return new ResponseEntity<Streak>(streak, HttpStatus.OK);
 	}
+	
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Streak> deleteStreak(@PathVariable("id")Integer id,

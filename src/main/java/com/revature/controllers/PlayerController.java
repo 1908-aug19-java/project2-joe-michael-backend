@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ import com.revature.util.AuthorizationUtil;
 
 @RestController
 @RequestMapping("/players")
+@CrossOrigin
 public class PlayerController {
 	
 	@Autowired
@@ -61,6 +63,7 @@ public class PlayerController {
 		
 	}
 	
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<Player> getPlayerById(@RequestHeader(value="token")String token,
 			@RequestHeader(value="user_id")int user_id,
@@ -83,6 +86,7 @@ public class PlayerController {
 		}
 		
 	}
+	
 	
 	@PostMapping
 	public ResponseEntity<Player> addPlayer(@RequestHeader(value="token")String token,
@@ -119,6 +123,7 @@ public class PlayerController {
 		return new ResponseEntity<Player>(player, HttpStatus.CREATED);
 	}
 	
+	
 	@PutMapping("/{id}")
 	public ResponseEntity<Player> updatePlayer(@RequestHeader(value="token")String token,
 			@RequestHeader(value="user_id")int user_id,
@@ -139,6 +144,7 @@ public class PlayerController {
 		return new ResponseEntity<Player>(player, HttpStatus.OK);
 		
 	}
+	
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Player> deletePlayer(@RequestHeader(value="token")String token,

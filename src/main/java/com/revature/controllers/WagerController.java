@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import com.revature.util.AuthorizationUtil;
 
 @RestController
 @RequestMapping("/wagers")
+@CrossOrigin
 public class WagerController {
 	
 	@Autowired
@@ -55,6 +57,7 @@ public class WagerController {
 		return new ResponseEntity<List<Wager>>(wagers, HttpStatus.OK);
 	}
 	
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<Wager> getWagerById(@PathVariable("id")Integer id,
 			@RequestHeader(value="token")String token,
@@ -73,6 +76,7 @@ public class WagerController {
 		return new ResponseEntity<Wager>(wager, HttpStatus.OK);
 	}
 	
+	
 	@PostMapping
 	public ResponseEntity<Wager> addWager(@Valid @RequestBody Wager wager,
 			@RequestHeader(value="token")String token,
@@ -90,6 +94,7 @@ public class WagerController {
 		wagerService.addWager(wager);
 		return new ResponseEntity<Wager>(wager, HttpStatus.CREATED);
 	}
+	
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Wager> updateWager(@PathVariable("id")Integer id,
@@ -110,6 +115,7 @@ public class WagerController {
 		wager = wagerService.updateWager(wager);
 		return new ResponseEntity<Wager>(wager, HttpStatus.OK); 
 	}
+	
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Wager> deleteWager(@PathVariable("id")Integer id,
