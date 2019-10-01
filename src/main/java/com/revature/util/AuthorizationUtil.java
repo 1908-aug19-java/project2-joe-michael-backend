@@ -24,6 +24,9 @@ public class AuthorizationUtil {
 	
 	public Boolean authorize(User user, String token) {
 		String decryptedToken = EncryptionUtil.decrypt(token);
+		if(decryptedToken == null) {
+			return false;
+		}
 		String[] splitToken = decryptedToken.split(":");
 		if(splitToken[0].contentEquals(user.getEmail()) && splitToken[1].contentEquals(user.getPassword())) {
 			return true;
