@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import com.revature.util.AuthorizationUtil;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin
 public class UserController {
 	
 	@Autowired
@@ -32,6 +34,7 @@ public class UserController {
 	
 	private AuthorizationUtil au = new AuthorizationUtil();
 	
+	 
 	@GetMapping
 	public ResponseEntity<List<User>> getAll(@RequestHeader(value="token")String token,
 			@RequestHeader(value="user_id")int user_id){
@@ -49,6 +52,7 @@ public class UserController {
 		return new ResponseEntity<List<User>>(users, HttpStatus.OK);
 	}
 	
+	 
 	@GetMapping("/{id}")
 	public ResponseEntity<User> getUserById(@PathVariable("id")Integer id,
 			@RequestHeader(value="token")String token,
@@ -67,6 +71,7 @@ public class UserController {
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 	
+	
 	@PostMapping
 	public ResponseEntity<User> addUser(@Valid @RequestBody User user){
 		
@@ -78,8 +83,14 @@ public class UserController {
 		streak = streakService.addStreak(streak);
 		user.setStreak(streak);
 		userService.addUser(user);
-		return new ResponseEntity<User>(user, HttpStatus.CREATED);
+		User newUser = userService.findUserByEmail(user.getEmail());
+		String token = au.login(newUser, user);
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.set("Access-Control-Expose-Headers", "token");
+		responseHeaders.set("token", token);
+		return new ResponseEntity<User>(user, responseHeaders, HttpStatus.CREATED);
 	}
+	
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<User> updateUser(@PathVariable("id")Integer id,
@@ -101,6 +112,7 @@ public class UserController {
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 	
+	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<User> deleteUser(@PathVariable("id")Integer id,
 			@RequestHeader(value="token")String token,
@@ -119,10 +131,14 @@ public class UserController {
 		return new ResponseEntity<User>(HttpStatus.OK);
 	}
 	
+	
 	@PutMapping
 	public ResponseEntity<User> loginUser(@Valid @RequestBody User user) {
 		
 		User userInDb = userService.findUserByEmail(user.getEmail());
+		if(userInDb == null) {
+			return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		}
 		String token = au.login(userInDb, user);
 		
 		if(token.contentEquals("failed authorization")) {
@@ -130,6 +146,7 @@ public class UserController {
 		}
 		else {
 			HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.set("Access-Control-Expose-Headers", "token");
 			responseHeaders.set("token", token);
 			userInDb.setPassword("");
 			return new ResponseEntity<User>(userInDb, responseHeaders, HttpStatus.ACCEPTED);

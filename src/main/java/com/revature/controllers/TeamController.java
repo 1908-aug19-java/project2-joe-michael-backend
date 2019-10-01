@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import com.revature.util.AuthorizationUtil;
 
 @RestController
 @RequestMapping("/teams")
+@CrossOrigin
 public class TeamController {
 	
 	@Autowired
@@ -31,6 +33,7 @@ public class TeamController {
 	private UserService userService;
 	
 	AuthorizationUtil au = new AuthorizationUtil();
+	
 	
 	@GetMapping
 	public ResponseEntity<List<Team>> getAll(@RequestHeader(value="token")String token, 
@@ -46,6 +49,7 @@ public class TeamController {
 		List<Team> teams = teamService.findAllTeams();
 		return new ResponseEntity<List<Team>>(teams, HttpStatus.OK);
 	}
+	
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Team> getTeamById(@PathVariable("id")Integer id,
@@ -64,6 +68,7 @@ public class TeamController {
 		Team team = teamService.findTeamById(id);
 		return new ResponseEntity<Team>(team, HttpStatus.OK);
 	}
+	
 	
 	@PostMapping
 	public ResponseEntity<Team> addTeam(@RequestParam(value="user_id", required=true)Integer id,
@@ -90,6 +95,7 @@ public class TeamController {
 		return new ResponseEntity<Team>(team, HttpStatus.CREATED);
 	}
 	
+	
 	@PutMapping("/{id}")
 	public ResponseEntity<Team> updateTeam(@PathVariable("id")Integer id,
 			@Valid @RequestBody Team team,
@@ -109,6 +115,7 @@ public class TeamController {
 		team = teamService.updateTeam(team);
 		return new ResponseEntity<Team>(team, HttpStatus.OK);
 	}
+	
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Team> deleteTeam(@RequestParam(value="user_id", required=false)Integer userId,
