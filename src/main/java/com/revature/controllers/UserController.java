@@ -133,7 +133,7 @@ public class UserController {
 	
 	
 	@PutMapping
-	public ResponseEntity<User> loginUser(@Valid @RequestBody User user){
+	public ResponseEntity<User> loginUser(@Valid @RequestBody User user) {
 		
 		User userInDb = userService.findUserByEmail(user.getEmail());
 		if(userInDb == null) {
