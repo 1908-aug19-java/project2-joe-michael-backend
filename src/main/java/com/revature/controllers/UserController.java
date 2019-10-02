@@ -49,6 +49,9 @@ public class UserController {
 		}
 		
 		List<User> users = userService.findAllUsers();
+		for(User u : users) {
+			u.setPassword("");
+		}
 		return new ResponseEntity<List<User>>(users, HttpStatus.OK);
 	}
 	
@@ -68,6 +71,7 @@ public class UserController {
 		}
 		
 		user = userService.findUserById(id);
+		user.setPassword("");
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 	
@@ -85,10 +89,13 @@ public class UserController {
 		userService.addUser(user);
 		User newUser = userService.findUserByEmail(user.getEmail());
 		String token = au.login(newUser, user);
+		
+		newUser.setPassword("");
+		
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.set("Access-Control-Expose-Headers", "token");
 		responseHeaders.set("token", token);
-		return new ResponseEntity<User>(user, responseHeaders, HttpStatus.CREATED);
+		return new ResponseEntity<User>(newUser, responseHeaders, HttpStatus.CREATED);
 	}
 	
 	
@@ -109,6 +116,7 @@ public class UserController {
 		
 		user.setId(id);
 		user =  userService.updateUser(user);
+		user.setPassword("");
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 	
