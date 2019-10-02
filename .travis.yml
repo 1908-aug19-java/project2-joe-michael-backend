@@ -3,7 +3,7 @@ addons:
   sonarcloud:
     organization: "1908-aug19-java"
     token:
-      secure: travis encrypt bbe542a935380f1f83117d5cabb98e8fc7b05dfc
+      secure: $SONAR_TOKEN
 
 script:
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
