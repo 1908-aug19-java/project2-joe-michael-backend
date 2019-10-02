@@ -15,7 +15,7 @@ public class EncryptionUtil {
     private static SecretKeySpec secretKey;
     private static byte[] key;
     
-    private final static String AES_KEY = System.getenv("AES_KEY");
+    private final static String AES_KEY = "9z$C&F)J@NcRfUjXn2r4u7x!A%D*G-Ka";
     
     private EncryptionUtil() {
     	
