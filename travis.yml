@@ -1,0 +1,8 @@
+language: java
+​
+script:
+  - mvn sonar:sonar
+  -Dsonar.projectKey="" 
+  -Dsonar.organization="" 
+  -Dsonar.host.url=https://sonarcloud.io 
+  -Dsonar.login=$SONAR_TOKEN
