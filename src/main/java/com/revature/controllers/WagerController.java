@@ -38,61 +38,64 @@ public class WagerController {
 	@GetMapping
 	public ResponseEntity<List<Wager>> getAll(@RequestParam(value="user_id", required=false)Integer id, 
 			@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id){
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<List<Wager>>(HttpStatus.UNAUTHORIZED);
+			@RequestHeader(value="user_id")int userId){
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<List<Wager>>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!authorized) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		if(id != null) {
 		    user = userService.findUserById(id);
 			List<Wager> wagers = wagerService.findAllWagersByInitiatingOrRecieving(user, user);
-			return new ResponseEntity<List<Wager>>(wagers, HttpStatus.OK);
+			return new ResponseEntity<>(wagers, HttpStatus.OK);
 		}
 		List<Wager> wagers = wagerService.findAllWagers();
-		return new ResponseEntity<List<Wager>>(wagers, HttpStatus.OK);
+		return new ResponseEntity<>(wagers, HttpStatus.OK);
 	}
 	
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Wager> getWagerById(@PathVariable("id")Integer id,
 			@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id) {
+			@RequestHeader(value="user_id")int userId) {
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<Wager>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<Wager>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!authorized) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		Wager wager = wagerService.findWagerById(id);
-		return new ResponseEntity<Wager>(wager, HttpStatus.OK);
+		return new ResponseEntity<>(wager, HttpStatus.OK);
 	}
 	
 	
 	@PostMapping
 	public ResponseEntity<Wager> addWager(@Valid @RequestBody Wager wager,
 			@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id){
+			@RequestHeader(value="user_id")int userId){
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<Wager>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<Wager>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!authorized) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		wagerService.addWager(wager);
-		return new ResponseEntity<Wager>(wager, HttpStatus.CREATED);
+		return new ResponseEntity<>(wager, HttpStatus.CREATED);
 	}
 	
 	
@@ -100,38 +103,40 @@ public class WagerController {
 	public ResponseEntity<Wager> updateWager(@PathVariable("id")Integer id,
 			@Valid @RequestBody Wager wager,
 			@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id) {
+			@RequestHeader(value="user_id")int userId) {
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<Wager>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<Wager>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!authorized) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		wager.setId(id);
 		wager = wagerService.updateWager(wager);
-		return new ResponseEntity<Wager>(wager, HttpStatus.OK); 
+		return new ResponseEntity<>(wager, HttpStatus.OK); 
 	}
 	
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Wager> deleteWager(@PathVariable("id")Integer id,
 			@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id) {
+			@RequestHeader(value="user_id")int userId) {
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<Wager>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<Wager>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!authorized) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		wagerService.deleteWager(new Wager(id));
-		return new ResponseEntity<Wager>(HttpStatus.OK); 
+		return new ResponseEntity<>(HttpStatus.OK); 
 	}
 }

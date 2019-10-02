@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-//import com.revature.models.Auth;
 import com.revature.models.Player;
 import com.revature.models.Team;
 import com.revature.models.User;
@@ -42,23 +40,23 @@ public class PlayerController {
 	
 	@GetMapping
 	public ResponseEntity<List<Player>> getAll(@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id){
+			@RequestHeader(value="user_id")int userId){
 		
-		if(token != null && user_id != 0) {
-			User user = userService.findUserById(user_id);
-			if(au.authorize(user, token)) {
+		if(token != null && userId != 0) {
+			User user = userService.findUserById(userId);
+			Boolean authorized = au.authorize(user, token);
+			if(authorized) {
 				
-				//normal operations
 				List<Player> players = playerService.findAllPlayers();
-				return new ResponseEntity<List<Player>>(players, HttpStatus.ACCEPTED);
+				return new ResponseEntity<>(players, HttpStatus.ACCEPTED);
 			
 			}
 			else {
-				return new ResponseEntity<List<Player>>(HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 		}
 		else {
-			return new ResponseEntity<List<Player>>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}	
 		
 	}
@@ -66,23 +64,24 @@ public class PlayerController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Player> getPlayerById(@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id,
+			@RequestHeader(value="user_id")int userId,
 			@PathVariable("id")Integer id) {
 		
-		if(token != null && user_id != 0) {
-			User user = userService.findUserById(user_id);
-			if(au.authorize(user, token)) {
+		if(token != null && userId != 0) {
+			User user = userService.findUserById(userId);
+			Boolean authorized = au.authorize(user, token);
+			if(authorized) {
 				//normal operations
 				Player player = playerService.findPlayerById(id);
 
-				return new ResponseEntity<Player>(player, HttpStatus.ACCEPTED);
+				return new ResponseEntity<>(player, HttpStatus.ACCEPTED);
 			}
 			else {
-				return new ResponseEntity<Player>(HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 		}
 		else {
-			return new ResponseEntity<Player>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 	}
@@ -90,18 +89,19 @@ public class PlayerController {
 	
 	@PostMapping
 	public ResponseEntity<Player> addPlayer(@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id,
+			@RequestHeader(value="user_id")int userId,
 			@RequestParam(value="team_id", required=false)Integer teamId,
-			@RequestParam(value="user_id", required=false)Integer userId,
+			@RequestParam(value="user_id", required=false)Integer userIdParam,
 			@Valid @RequestBody Player player){
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<Player>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<Player>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!authorized) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		player = playerService.addPlayer(player);
@@ -112,59 +112,61 @@ public class PlayerController {
 			team.setPlayers(players);
 			teamService.updateTeam(team);
 		}
-		else if(userId != null) {
-			user = userService.findUserById(userId);
+		else if(userIdParam != null) {
+			user = userService.findUserById(userIdParam);
 			List<Player> players = user.getPlayers();
 			players.add(player);
 			user.setPlayers(players);
 			userService.updateUser(user);
 		}
 		
-		return new ResponseEntity<Player>(player, HttpStatus.CREATED);
+		return new ResponseEntity<>(player, HttpStatus.CREATED);
 	}
 	
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Player> updatePlayer(@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id,
+			@RequestHeader(value="user_id")int userId,
 			@PathVariable("id")Integer id, 
 			@Valid @RequestBody Player player) {
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<Player>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<Player>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!authorized) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		player.setApi_player_id(id);
 		player = playerService.updatePlayer(player);
-		return new ResponseEntity<Player>(player, HttpStatus.OK);
+		return new ResponseEntity<>(player, HttpStatus.OK);
 		
 	}
 	
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Player> deletePlayer(@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id,
+			@RequestHeader(value="user_id")int userId,
 			@RequestParam(value="team_id", required=false)Integer teamId,
-			@RequestParam(value="user_id", required=false)Integer userId,
+			@RequestParam(value="user_id", required=false)Integer userIdParam,
 			@PathVariable("id")Integer id) {
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<Player>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<Player>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!authorized) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		Player player = playerService.findPlayerById(id);
-		if(userId != null) {
-			user = userService.findUserById(userId);
+		if(userIdParam != null) {
+			user = userService.findUserById(userIdParam);
 			List<Player> players = user.getPlayers();
 			for (int i = 0; i<players.size();i++) {
 				if (players.get(i).getId() == player.getId()) {
@@ -187,7 +189,7 @@ public class PlayerController {
 		}
 		
 		playerService.deletePlayer(player);
-		return new ResponseEntity<Player>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 		
 	}
 }
