@@ -37,36 +37,38 @@ public class TeamController {
 	
 	@GetMapping
 	public ResponseEntity<List<Team>> getAll(@RequestHeader(value="token")String token, 
-			@RequestHeader(value="user_id")int user_id){
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<List<Team>>(HttpStatus.UNAUTHORIZED);
+			@RequestHeader(value="user_id")int userId){
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<List<Team>>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!authorized) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		List<Team> teams = teamService.findAllTeams();
-		return new ResponseEntity<List<Team>>(teams, HttpStatus.OK);
+		return new ResponseEntity<>(teams, HttpStatus.OK);
 	}
 	
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Team> getTeamById(@PathVariable("id")Integer id,
 			@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id) {
+			@RequestHeader(value="user_id")int userId) {
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<Team>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<Team>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!authorized) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		Team team = teamService.findTeamById(id);
-		return new ResponseEntity<Team>(team, HttpStatus.OK);
+		return new ResponseEntity<>(team, HttpStatus.OK);
 	}
 	
 	
@@ -74,15 +76,16 @@ public class TeamController {
 	public ResponseEntity<Team> addTeam(@RequestParam(value="user_id", required=true)Integer id,
 			@Valid @RequestBody Team team,
 			@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id){
+			@RequestHeader(value="user_id")int userId){
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<Team>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<Team>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!authorized) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		team = teamService.addTeam(team);
@@ -92,7 +95,7 @@ public class TeamController {
 		user.setTeams(teams);
 		userService.updateUser(user);
 		
-		return new ResponseEntity<Team>(team, HttpStatus.CREATED);
+		return new ResponseEntity<>(team, HttpStatus.CREATED);
 	}
 	
 	
@@ -100,41 +103,43 @@ public class TeamController {
 	public ResponseEntity<Team> updateTeam(@PathVariable("id")Integer id,
 			@Valid @RequestBody Team team,
 			@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id) {
+			@RequestHeader(value="user_id")int userId) {
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<Team>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<Team>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!authorized) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		team.setApi_team_id(id);
 		team = teamService.updateTeam(team);
-		return new ResponseEntity<Team>(team, HttpStatus.OK);
+		return new ResponseEntity<>(team, HttpStatus.OK);
 	}
 	
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Team> deleteTeam(@RequestParam(value="user_id", required=false)Integer userId,
+	public ResponseEntity<Team> deleteTeam(@RequestParam(value="user_id", required=false)Integer userIdParam,
 			@PathVariable("id")Integer id,
 			@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id) {
+			@RequestHeader(value="user_id")int userId) {
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<Team>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<Team>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!authorized) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		Team team = teamService.findTeamById(id);
-		if(userId != null) {
-		    user = userService.findUserById(userId);
+		if(userIdParam != null) {
+		    user = userService.findUserById(userIdParam);
 			List<Team> teams = user.getTeams();
 			for (int i = 0; i<teams.size();i++) {
 				if (teams.get(i).getId() == team.getId()) {
@@ -145,6 +150,6 @@ public class TeamController {
 			userService.updateUser(user);
 		}
 		 teamService.deleteTeam(new Team(id));
-		return new ResponseEntity<Team>(team, HttpStatus.OK);
+		return new ResponseEntity<>(team, HttpStatus.OK);
 	}
 }
