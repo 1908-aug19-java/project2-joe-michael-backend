@@ -1,5 +1,5 @@
 language: java
-  addons:
+addons:
   sonarcloud:
     organization: "1908-aug19-java"
     token:
