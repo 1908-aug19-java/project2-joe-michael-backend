@@ -37,42 +37,44 @@ public class UserController {
 	 
 	@GetMapping
 	public ResponseEntity<List<User>> getAll(@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id){
+			@RequestHeader(value="user_id")int userId){
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<List<User>>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<List<User>>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!Boolean.TRUE.equals(authorized)) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		List<User> users = userService.findAllUsers();
 		for(User u : users) {
 			u.setPassword("");
 		}
-		return new ResponseEntity<List<User>>(users, HttpStatus.OK);
+		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 	
 	 
 	@GetMapping("/{id}")
 	public ResponseEntity<User> getUserById(@PathVariable("id")Integer id,
 			@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id) {
+			@RequestHeader(value="user_id")int userId) {
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<User>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<User>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!Boolean.TRUE.equals(authorized)) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		user = userService.findUserById(id);
 		user.setPassword("");
-		return new ResponseEntity<User>(user, HttpStatus.OK);
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	
 	
@@ -80,7 +82,7 @@ public class UserController {
 	public ResponseEntity<User> addUser(@Valid @RequestBody User user){
 		
 		if(userService.findUserByEmail(user.getEmail()) != null) {
-			return new ResponseEntity<User>(HttpStatus.CONFLICT);
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 		
 		Streak streak = new Streak(0,0,0,4);
@@ -95,7 +97,7 @@ public class UserController {
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.set("Access-Control-Expose-Headers", "token");
 		responseHeaders.set("token", token);
-		return new ResponseEntity<User>(newUser, responseHeaders, HttpStatus.CREATED);
+		return new ResponseEntity<>(newUser, responseHeaders, HttpStatus.CREATED);
 	}
 	
 	
@@ -103,40 +105,43 @@ public class UserController {
 	public ResponseEntity<User> updateUser(@PathVariable("id")Integer id,
 			@Valid @RequestBody User user,
 			@RequestHeader(value="token")String token, 
-			@RequestHeader(value="user_id")int user_id) {
+			@RequestHeader(value="user_id")int userId) {
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<User>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User authUser = userService.findUserById(user_id);
-		if(!au.authorize(authUser, token)) {
-			return new ResponseEntity<User>(HttpStatus.UNAUTHORIZED);
+		User authUser = userService.findUserById(userId);
+		Boolean authorized = au.authorize(authUser, token);
+		if(!Boolean.TRUE.equals(authorized)) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		user.setId(id);
+		user.setPassword(authUser.getPassword());
 		user =  userService.updateUser(user);
 		user.setPassword("");
-		return new ResponseEntity<User>(user, HttpStatus.OK);
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<User> deleteUser(@PathVariable("id")Integer id,
 			@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id) {
+			@RequestHeader(value="user_id")int userId) {
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<User>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<User>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!Boolean.TRUE.equals(authorized)) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		userService.deleteUser(new User(id));
-		return new ResponseEntity<User>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	
@@ -145,19 +150,19 @@ public class UserController {
 		
 		User userInDb = userService.findUserByEmail(user.getEmail());
 		if(userInDb == null) {
-			return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		String token = au.login(userInDb, user);
 		
 		if(token.contentEquals("failed authorization")) {
-			return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		else {
 			HttpHeaders responseHeaders = new HttpHeaders();
 			responseHeaders.set("Access-Control-Expose-Headers", "token");
 			responseHeaders.set("token", token);
 			userInDb.setPassword("");
-			return new ResponseEntity<User>(userInDb, responseHeaders, HttpStatus.ACCEPTED);
+			return new ResponseEntity<>(userInDb, responseHeaders, HttpStatus.ACCEPTED);
 		}
 	}
 }

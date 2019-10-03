@@ -36,39 +36,41 @@ public class StreakController {
 	
 	@GetMapping
 	public ResponseEntity<List<Streak>> getAll(@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id){
+			@RequestHeader(value="user_id")int userId){
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<List<Streak>>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<List<Streak>>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!Boolean.TRUE.equals(authorized)) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		List<Streak> streaks = streakService.findAllStreaks();
-		return new ResponseEntity<List<Streak>>(streaks, HttpStatus.OK);
+		return new ResponseEntity<>(streaks, HttpStatus.OK);
 	}
 	
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Streak> getStreakById(@PathVariable("id")Integer id,
 			@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id) {
+			@RequestHeader(value="user_id")int userId) {
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<Streak>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<Streak>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!Boolean.TRUE.equals(authorized)) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		Streak streak = streakService.findStreakById(id);
 		
-		return new ResponseEntity<Streak>(streak, HttpStatus.OK);
+		return new ResponseEntity<>(streak, HttpStatus.OK);
 		
 	}
 	
@@ -76,19 +78,20 @@ public class StreakController {
 	@PostMapping
 	public ResponseEntity<Streak> addStreak(@Valid @RequestBody Streak streak,
 			@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id){
+			@RequestHeader(value="user_id")int userId){
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<Streak>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<Streak>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!Boolean.TRUE.equals(authorized)) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		streakService.addStreak(streak);
-		return new ResponseEntity<Streak>(streak, HttpStatus.CREATED);
+		return new ResponseEntity<>(streak, HttpStatus.CREATED);
 	}
 	
 	
@@ -96,38 +99,40 @@ public class StreakController {
 	public ResponseEntity<Streak> updateStreak(@PathVariable("id")Integer id,
 			@Valid @RequestBody Streak streak,
 			@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id) {
+			@RequestHeader(value="user_id")int userId) {
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<Streak>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<Streak>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!Boolean.TRUE.equals(authorized)) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		streak.setId(id);
 		streak = streakService.updateStreak(streak);
-		return new ResponseEntity<Streak>(streak, HttpStatus.OK);
+		return new ResponseEntity<>(streak, HttpStatus.OK);
 	}
 	
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Streak> deleteStreak(@PathVariable("id")Integer id,
 			@RequestHeader(value="token")String token,
-			@RequestHeader(value="user_id")int user_id) {
+			@RequestHeader(value="user_id")int userId) {
 		
-		if(token == null || user_id == 0) {
-			return new ResponseEntity<Streak>(HttpStatus.UNAUTHORIZED);
+		if(token == null || userId == 0) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User user = userService.findUserById(user_id);
-		if(!au.authorize(user, token)) {
-			return new ResponseEntity<Streak>(HttpStatus.UNAUTHORIZED);
+		User user = userService.findUserById(userId);
+		Boolean authorized = au.authorize(user, token);
+		if(!Boolean.TRUE.equals(authorized)) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
 		streakService.deleteStreak(new Streak(id));
-		return new ResponseEntity<Streak>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }
