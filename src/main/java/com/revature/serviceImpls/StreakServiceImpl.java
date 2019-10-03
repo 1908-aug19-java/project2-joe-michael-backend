@@ -1,10 +1,8 @@
 package com.revature.serviceImpls;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.revature.models.Streak;
 import com.revature.repositories.StreakRepository;
 import com.revature.services.StreakService;

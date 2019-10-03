@@ -1,14 +1,11 @@
 package com.revature.models;
 
 import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
 import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Component
@@ -17,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Player implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-//	Player
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
@@ -27,7 +24,7 @@ public class Player implements Serializable{
 	
 	public Player() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public Player(int id) {

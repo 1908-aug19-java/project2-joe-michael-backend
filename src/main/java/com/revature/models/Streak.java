@@ -6,9 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
 import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Component
@@ -17,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Streak implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
-	//streak
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
@@ -28,7 +26,6 @@ public class Streak implements Serializable{
 	
 	public Streak() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	public Streak(int id) {
