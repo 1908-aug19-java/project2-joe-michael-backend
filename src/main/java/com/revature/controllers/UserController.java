@@ -118,6 +118,7 @@ public class UserController {
 		}
 		
 		user.setId(id);
+		user.setPassword(authUser.getPassword());
 		user =  userService.updateUser(user);
 		user.setPassword("");
 		return new ResponseEntity<>(user, HttpStatus.OK);
