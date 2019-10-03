@@ -45,7 +45,7 @@ public class PlayerController {
 		if(token != null && userId != 0) {
 			User user = userService.findUserById(userId);
 			Boolean authorized = au.authorize(user, token);
-			if(authorized) {
+			if(Boolean.TRUE.equals(authorized)) {
 				
 				List<Player> players = playerService.findAllPlayers();
 				return new ResponseEntity<>(players, HttpStatus.ACCEPTED);
@@ -70,7 +70,7 @@ public class PlayerController {
 		if(token != null && userId != 0) {
 			User user = userService.findUserById(userId);
 			Boolean authorized = au.authorize(user, token);
-			if(authorized) {
+			if(Boolean.TRUE.equals(authorized)) {
 				//normal operations
 				Player player = playerService.findPlayerById(id);
 
@@ -100,7 +100,7 @@ public class PlayerController {
 		
 		User user = userService.findUserById(userId);
 		Boolean authorized = au.authorize(user, token);
-		if(!authorized) {
+		if(!Boolean.TRUE.equals(authorized)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
@@ -136,7 +136,7 @@ public class PlayerController {
 		
 		User user = userService.findUserById(userId);
 		Boolean authorized = au.authorize(user, token);
-		if(!authorized) {
+		if(!Boolean.TRUE.equals(authorized)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
@@ -160,7 +160,7 @@ public class PlayerController {
 		
 		User user = userService.findUserById(userId);
 		Boolean authorized = au.authorize(user, token);
-		if(!authorized) {
+		if(!Boolean.TRUE.equals(authorized)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		

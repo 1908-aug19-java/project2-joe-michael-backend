@@ -44,7 +44,7 @@ public class TeamController {
 		
 		User user = userService.findUserById(userId);
 		Boolean authorized = au.authorize(user, token);
-		if(!authorized) {
+		if(!Boolean.TRUE.equals(authorized)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		List<Team> teams = teamService.findAllTeams();
@@ -63,7 +63,7 @@ public class TeamController {
 		
 		User user = userService.findUserById(userId);
 		Boolean authorized = au.authorize(user, token);
-		if(!authorized) {
+		if(!Boolean.TRUE.equals(authorized)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
@@ -84,7 +84,7 @@ public class TeamController {
 		
 		User user = userService.findUserById(userId);
 		Boolean authorized = au.authorize(user, token);
-		if(!authorized) {
+		if(!Boolean.TRUE.equals(authorized)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
@@ -111,7 +111,7 @@ public class TeamController {
 		
 		User user = userService.findUserById(userId);
 		Boolean authorized = au.authorize(user, token);
-		if(!authorized) {
+		if(!Boolean.TRUE.equals(authorized)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
@@ -133,7 +133,7 @@ public class TeamController {
 		
 		User user = userService.findUserById(userId);
 		Boolean authorized = au.authorize(user, token);
-		if(!authorized) {
+		if(!Boolean.TRUE.equals(authorized)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
