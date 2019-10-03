@@ -11,11 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Component
@@ -25,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class User implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-	//user specific attributes
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
@@ -33,7 +31,6 @@ public class User implements Serializable {
 	private String password;
 	private int acct_level;
 	private String name;
-	//one to many 
 	
 	@OneToMany(cascade = {CascadeType.ALL, CascadeType.REMOVE}, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
@@ -41,13 +38,12 @@ public class User implements Serializable {
 	@OneToMany
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Team> teams = new ArrayList<>();
-	//one to one
+	
 	@OneToOne
 	private Streak streak;
 	
 	public User() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public User(int id) {

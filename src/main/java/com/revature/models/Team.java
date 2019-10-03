@@ -2,18 +2,15 @@ package com.revature.models;
 
 import java.io.Serializable;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Component
@@ -22,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Team implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
-	//team
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
@@ -36,7 +33,6 @@ public class Team implements Serializable{
 	
 	public Team() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Team(int id) {
