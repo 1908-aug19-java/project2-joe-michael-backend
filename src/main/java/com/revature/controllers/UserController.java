@@ -45,7 +45,7 @@ public class UserController {
 		
 		User user = userService.findUserById(userId);
 		Boolean authorized = au.authorize(user, token);
-		if(!authorized) {
+		if(!Boolean.TRUE.equals(authorized)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
@@ -68,7 +68,7 @@ public class UserController {
 		
 		User user = userService.findUserById(userId);
 		Boolean authorized = au.authorize(user, token);
-		if(!authorized) {
+		if(!Boolean.TRUE.equals(authorized)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
@@ -113,7 +113,7 @@ public class UserController {
 		
 		User authUser = userService.findUserById(userId);
 		Boolean authorized = au.authorize(authUser, token);
-		if(!authorized) {
+		if(!Boolean.TRUE.equals(authorized)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
@@ -135,7 +135,7 @@ public class UserController {
 		
 		User user = userService.findUserById(userId);
 		Boolean authorized = au.authorize(user, token);
-		if(!authorized) {
+		if(!Boolean.TRUE.equals(authorized)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		

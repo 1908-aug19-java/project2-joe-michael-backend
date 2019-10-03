@@ -44,7 +44,7 @@ public class StreakController {
 		
 		User user = userService.findUserById(userId);
 		Boolean authorized = au.authorize(user, token);
-		if(!authorized) {
+		if(!Boolean.TRUE.equals(authorized)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
@@ -64,7 +64,7 @@ public class StreakController {
 		
 		User user = userService.findUserById(userId);
 		Boolean authorized = au.authorize(user, token);
-		if(!authorized) {
+		if(!Boolean.TRUE.equals(authorized)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
@@ -86,7 +86,7 @@ public class StreakController {
 		
 		User user = userService.findUserById(userId);
 		Boolean authorized = au.authorize(user, token);
-		if(!authorized) {
+		if(!Boolean.TRUE.equals(authorized)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
@@ -107,7 +107,7 @@ public class StreakController {
 		
 		User user = userService.findUserById(userId);
 		Boolean authorized = au.authorize(user, token);
-		if(!authorized) {
+		if(!Boolean.TRUE.equals(authorized)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
@@ -128,7 +128,7 @@ public class StreakController {
 		
 		User user = userService.findUserById(userId);
 		Boolean authorized = au.authorize(user, token);
-		if(!authorized) {
+		if(!Boolean.TRUE.equals(authorized)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
